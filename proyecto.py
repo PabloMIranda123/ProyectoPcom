@@ -14,6 +14,19 @@ def mostrar_enfoques():
         print(f"[{fila[0]}] {fila[1]} — {fila[2]} dias, {fila[3]}")
  
     conexion.close()
+
+def borrar_persona():
+    ver_todo()
+    id_borrar = input("Introduce el ID de la persona que quieres borrar: ")
+ 
+    conexion = sqlite3.connect(DB_PATH)
+    cursor = conexion.cursor()
+ 
+    cursor.execute("DELETE FROM Persona WHERE id = ?", (id_borrar,))
+ 
+    conexion.commit()
+    print(f"Persona con ID {id_borrar} eliminada.")
+    conexion.close()
  
  
 def agregar_persona():
@@ -69,7 +82,8 @@ def menu():
         print("1. Agregar persona")
         print("2. Ver personas")
         print("3. Ver todo")
-        print("4. Salir")
+        print("4. Borrar persona")
+        print("5. Salir")
         opcion = input("Elige una opción: ")
  
         if opcion == "1":
@@ -79,6 +93,8 @@ def menu():
         elif opcion == "3":
             ver_todo()
         elif opcion == "4":
+            borrar_persona()
+        elif opcion == "5":
             print("Hasta luego!")
             break
         else:
