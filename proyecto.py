@@ -75,6 +75,43 @@ def ver_todo():
  
     conexion.close()
  
+def actualizar_persona():
+    ver_todo()
+    id_actualizar = input("Introduce el ID de la persona que quieres actualizar: ")
+ 
+    conexion = sqlite3.connect(DB_PATH)
+    cursor = conexion.cursor()
+ 
+    cursor.execute("SELECT id, nombre, id_entrenam, id_enfoque FROM Persona WHERE id = ?", (id_actualizar,))
+    persona = cursor.fetchone()
+ 
+    if not persona:
+        print(f"No se encontró ninguna persona con ID {id_actualizar}.")
+        conexion.close()
+        return
+ 
+    print(f"Editando: {persona[1]} | Entrenamiento: {persona[2]} | Enfoque: {persona[3]}")
+    print("(Deja en blanco para no cambiar el campo)")
+ 
+    nuevo_nombre = input("Nuevo nombre: ")
+    nuevo_entrenam = input("Nuevo ID de entrenamiento: ")
+    print("Enfoques disponibles:")
+    mostrar_enfoques()
+    nuevo_enfoque = input("Nuevo ID de enfoque: ")
+ 
+    nuevo_nombre = nuevo_nombre if nuevo_nombre else persona[1]
+    nuevo_entrenam = nuevo_entrenam if nuevo_entrenam else persona[2]
+    nuevo_enfoque = nuevo_enfoque if nuevo_enfoque else persona[3]
+ 
+    cursor.execute(
+        "UPDATE Persona SET nombre = ?, id_entrenam = ?, id_enfoque = ? WHERE id = ?",
+        (nuevo_nombre, nuevo_entrenam, nuevo_enfoque, id_actualizar)
+    )
+ 
+    conexion.commit()
+    print(f"Persona con ID {id_actualizar} actualizada correctamente.")
+    conexion.close()
+ 
  
 def menu():
     while True:
@@ -83,7 +120,8 @@ def menu():
         print("2. Ver personas")
         print("3. Ver todo")
         print("4. Borrar persona")
-        print("5. Salir")
+        print("5. Actualizar persona")
+        print("6. Salir")
         opcion = input("Elige una opción: ")
  
         if opcion == "1":
@@ -95,6 +133,8 @@ def menu():
         elif opcion == "4":
             borrar_persona()
         elif opcion == "5":
+            actualizar_persona()
+        elif opcion == "6":
             print("Hasta luego!")
             break
         else:
