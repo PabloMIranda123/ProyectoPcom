@@ -78,7 +78,7 @@ def ver_todo():
  
 def menu():
     while True:
-        print("\nBienvenido al programa de entrenamiento Tr3mb0, seleccione lo que desea hacer:")
+        print("Bienvenido al programa de entrenamiento Tr3mb0, seleccione lo que desea hacer:")
         print("1. Agregar persona")
         print("2. Ver personas")
         print("3. Ver todo")
